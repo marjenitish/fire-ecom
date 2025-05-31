@@ -1,7 +1,9 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
 import { 
@@ -10,17 +12,20 @@ import {
   Percent, 
   CalendarDays, 
   Star, 
-  ShoppingBag as FeatureShoppingBagIcon, // Renamed to avoid conflict with Logo's ShoppingBag
+  ShoppingBag as FeatureShoppingBagIcon,
   ChevronRight,
-  Search as SearchIcon // For mobile search
+  Search as SearchIcon,
+  Plus,
+  Eye
 } from "lucide-react";
+import { bestSellerProducts, type Product } from "@/data/demo";
 
 export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Secondary Navigation Bar */}
       <nav className="bg-background border-b border-border/40 py-3">
-        <div className="container flex items-center justify-between">
+        <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4 lg:gap-6">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -67,8 +72,8 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Mobile Search Bar - visible on smaller screens, hidden on md and up where header search is visible */}
-      <div className="container md:hidden py-3">
+      {/* Mobile Search Bar */}
+      <div className="container mx-auto md:hidden py-3">
         <div className="relative w-full">
           <Input
             type="search"
@@ -79,57 +84,34 @@ export default function HomePage() {
         </div>
       </div>
 
-
       {/* Hero Section */}
-      <section className="container py-8">
+      <section className="container mx-auto py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Banner */}
           <div className="lg:col-span-2 relative rounded-lg overflow-hidden shadow-lg min-h-[300px] sm:min-h-[400px] flex items-center p-8 bg-gray-100">
             <Image
-              src="https://placehold.co/1000x500.png"
+              src="https://chinabazaar.silkinv.com/storage/v1/object/sign/tasteme/banner-10.png?token=eyJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ0YXN0ZW1lL2Jhbm5lci0xMC5wbmciLCJpYXQiOjE3NDg3MjA4OTUsImV4cCI6MTc4MDI1Njg5NX0.EfVh3WOqMJg9A4Jt_hWJyuTAhLfM_vt43ZkKjKx7BKU"
               alt="Healthy Breakfast"
               layout="fill"
               objectFit="cover"
               className="z-0"
               data-ai-hint="healthy breakfast food"
             />
-            <div className="relative z-10 max-w-md">
-              <p className="text-sm font-semibold uppercase text-gray-700 tracking-wider mb-2">Breakfast Items</p>
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
-                Try Fresh Healthy Breakfast on Morning
-              </h1>
-              <p className="text-gray-600 mb-6">
-                Don't miss this opportunity at a special discount just for this week.
-              </p>
-              <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-md">
-                Explore More
-              </Button>
-            </div>
           </div>
-
-          {/* Right Banner */}
           <div className="relative rounded-lg overflow-hidden shadow-lg min-h-[300px] sm:min-h-[400px] flex flex-col justify-center items-center text-center p-8 bg-gray-800">
             <Image
-              src="https://placehold.co/600x800.png"
+              src="https://chinabazaar.silkinv.com/storage/v1/object/sign/tasteme/banner-11.png?token=eyJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ0YXN0ZW1lL2Jhbm5lci0xMS5wbmciLCJpYXQiOjE3NDg3MjA5MTUsImV4cCI6MTc4MDI1NjkxNX0.7iZ_xgzY09FPy1pA-RHhv0h1wsYSNcNHVHCqMaIMFgU"
               alt="Today's Best Deal"
               layout="fill"
               objectFit="cover"
               className="z-0 opacity-40"
               data-ai-hint="pizza deal"
             />
-            <div className="relative z-10">
-              <div className="bg-yellow-400 text-gray-900 rounded-full h-24 w-24 sm:h-28 sm:w-28 flex items-center justify-center text-3xl sm:text-4xl font-bold mb-4 shadow-md">
-                50%<span className="text-xl sm:text-2xl block -mt-2 ml-1">OFF</span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-1">TODAY'S</h2>
-              <h2 className="text-4xl sm:text-5xl font-bold text-yellow-400">BEST DEAL</h2>
-            </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="container py-8 md:py-12">
+      <section className="container mx-auto py-8 md:py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <FeatureCard
             icon={<Percent className="h-8 w-8 text-orange-500" />}
@@ -158,6 +140,17 @@ export default function HomePage() {
             </Button>
         </div>
       </section>
+
+      {/* Best Sellers Section */}
+      <section className="container mx-auto py-8 md:py-12">
+        <h2 className="text-2xl font-semibold text-center text-foreground mb-2">Best seller grocery near you</h2>
+        <p className="text-muted-foreground text-center mb-8">We provide best quality & fresh grocery items near your location</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+          {bestSellerProducts.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
@@ -178,6 +171,58 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
         <CardTitle className="font-headline text-md sm:text-lg mb-1">{title}</CardTitle>
         <CardDescription className="text-xs sm:text-sm">{description}</CardDescription>
       </div>
+    </Card>
+  );
+}
+
+interface ProductCardProps {
+  product: Product;
+}
+
+function ProductCard({ product }: ProductCardProps) {
+  const showPlusIcon = product.onSale || !product.price.includes('-');
+
+  return (
+    <Card className="group overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+      <CardContent className="p-3 sm:p-4 relative">
+        <div className="aspect-square relative bg-gray-50 rounded-md overflow-hidden mb-3">
+          <Image
+            src={product.imageUrl}
+            alt={product.name}
+            layout="fill"
+            objectFit="contain" // Changed to contain to better show products
+            className="group-hover:scale-105 transition-transform duration-300"
+            data-ai-hint={product.aiHint}
+          />
+          {product.onSale && (
+            <Badge className="absolute top-2 left-2 bg-teal-500 text-white px-2 py-1 text-xs">
+              ON SALE
+            </Badge>
+          )}
+        </div>
+        
+        <div className="flex justify-between items-start mb-1.5">
+          <div>
+            <span className="text-base sm:text-lg font-semibold text-foreground">{product.price}</span>
+            {product.originalPrice && (
+              <span className="text-xs sm:text-sm text-muted-foreground line-through ml-1.5">{product.originalPrice}</span>
+            )}
+          </div>
+          <Button 
+            size="icon" 
+            variant="outline"
+            className="rounded-full bg-teal-500 hover:bg-teal-600 text-white border-teal-500 hover:border-teal-600 h-7 w-7 sm:h-8 sm:w-8 shrink-0"
+            aria-label={showPlusIcon ? "Add to cart" : "View product"}
+          >
+            {showPlusIcon ? <Plus className="h-4 w-4 sm:h-5 sm:w-5" /> : <Eye className="h-4 w-4 sm:h-5 sm:w-5" />}
+          </Button>
+        </div>
+        
+        <h3 className="text-xs sm:text-sm font-medium text-foreground mb-0.5 truncate" title={product.name}>
+          {product.name}
+        </h3>
+        <p className="text-xs text-muted-foreground">{product.unit}</p>
+      </CardContent>
     </Card>
   );
 }
