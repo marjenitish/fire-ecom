@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Header } from '@/components/Header';
 import { Toaster } from "@/components/ui/toaster";
+import { siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'BoroBazar - Your Online Store', // Updated title
-  description: 'A Next.js e-commerce starter with TailwindCSS and Supabase.', // Updated description
+  title: `${siteConfig.name} - Your Online Store`,
+  description: siteConfig.description,
 };
 
 export default function RootLayout({
@@ -22,7 +23,6 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen bg-background">
         <Header />
-        {/* Removed container classes from main to allow full-width sections if needed by pages */}
         <main className="flex-grow"> 
           {children}
         </main>
