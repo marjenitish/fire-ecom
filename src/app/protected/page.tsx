@@ -5,6 +5,7 @@ import { ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 
 export default async function ProtectedPage() {
+  console.log("ProtectedPage")
   const user = await getAuthenticatedUser();
 
   if (!user) {

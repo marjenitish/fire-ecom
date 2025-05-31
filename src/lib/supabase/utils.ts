@@ -53,5 +53,6 @@ export async function getAuthenticatedUser() {
   const cookieStore = cookies();
   const supabase = createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
+  console.log("user", user)
   return user;
 }

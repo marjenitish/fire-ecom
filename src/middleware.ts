@@ -1,7 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { createMiddlewareClient } from '@/lib/supabase/middleware';
+import { getCurrentUserRole, getAuthenticatedUser } from '@/lib/supabase/utils';
 
 export async function middleware(request: NextRequest) {
+  console.log("middleware.ts started")
   const { supabase, response } = createMiddlewareClient(request);
 
   // Refresh session if expired - required for Server Components
@@ -10,6 +12,9 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
+
+
+  console.log("middleware_user", user)
 
   // Auth routes: if user is logged in and tries to access login/signup, redirect to protected page
   if (user && (pathname === '/login' || pathname === '/signup')) {
@@ -20,7 +25,15 @@ export async function middleware(request: NextRequest) {
   if (!user && (pathname.startsWith('/protected') || pathname.startsWith('/admin'))) {
     return NextResponse.redirect(new URL(`/login?redirect_to=${pathname}`, request.url));
   }
-  
+
+  // Admin routes: if user is logged in but not an admin and tries to access admin routes, redirect to protected
+  if (user && pathname.startsWith('/admin')) {
+    const userRole = await getCurrentUserRole();
+    if (userRole !== 'admin') {
+      return NextResponse.redirect(new URL('/protected?redirect_to=/admin', request.url));
+    }
+  }
+
   return response;
 }
 

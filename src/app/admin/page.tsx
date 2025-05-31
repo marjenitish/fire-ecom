@@ -7,6 +7,8 @@ import Image from 'next/image';
 
 export default async function AdminDashboardPage() {
   const user = await getAuthenticatedUser();
+
+  console.log("AdminDashboard", user)
   
   if (!user) {
     // Should be caught by middleware, but as a fallback
